@@ -180,3 +180,22 @@ Packets include identity-link provenance, source locations, manifest capture tim
 `NOT_APPLICABLE` requests return `steps_json: []` before artifact retrieval. Ambiguous intent or identity stops retrieval for review. Authorized packets do not assign a deletion status: policy reasoning, remediation planning, final output generation, and model integration remain subsequent tasks. `run` remains the foundation preflight command.
 
 Read [the implementation record](code/EVIDENCE_PIPELINE_RECORD.md) for every file and function added or changed, review guidance, and known limits.
+
+## Agent guardrails
+
+The reasoning boundary accepts a prepared packet, exposes only `audit_case(case_id)`, and validates structured reasoning before later serialization. Clear non-deletion requests skip the model. Uncertain authorization/identity, incomplete or late evidence, suspicious embedded instructions, invalid citations, and conflicting observations produce fixed-code human-review records.
+
+Inspect a case or validate a saved model response without network calls:
+
+```bash
+python3 -m code.main guard case_33 --output /tmp/case_33.guard.json --review-log /tmp/guard-review.jsonl
+python3 -m code.main guard case_33 --response /tmp/model-response.json --output /tmp/case_33.guard.json --review-log /tmp/guard-review.jsonl
+```
+
+Exit code `2` means escalation or command failure; the first command intentionally escalates if no response is available or middleware blocks the case. Review events append to the explicit review path and contain case IDs, reason codes, fixed unresolved questions, and source IDs. They exclude raw evidence and model text.
+
+`code.agent.AuditAgent` accepts one injected `ModelTransport`. A transport receives the system prompt, a single tool definition/callback, packet-derived JSON schema, and a fixed retry code. It must call the tool once per attempt and return JSON text. No live provider adapter is configured here; saved-response replay and synthetic transports exercise the complete boundary. An adapter must enforce provider request timeouts and token limits and account for usage. Adapters are trusted application code, not sandboxed Python plugins.
+
+The default is two attempts (configurable from one to three). Only malformed responses and explicitly transient transport failures retry. Tool violations, unsupported citations, conflicting evidence, and model-declared uncertainty escalate immediately. Retries receive the same frozen packet and never expand access. Returned reasoning steps carry `location` for exact citation checking and omit submission numbering; task 04 supplies final policy application, ordering, numbering, and CSV serialization.
+
+Read [the guardrail inspection record](code/AGENT_GUARDRAILS_RECORD.md) for each file/function and conservative validation limits.
