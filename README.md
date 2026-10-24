@@ -23,7 +23,7 @@ cd hackerrank-orchestrate-october26
 
 Start your AI coding tool from the **repository root** so it automatically reads [`AGENTS.md`](./AGENTS.md) and logs your session turns to `log.txt` in the root directory.
 
-Build your solution in `code/main.py`, or use another language and document its setup and run command clearly in your README.
+The terminal agent uses Python's standard library and is being built in `code/`. Run commands from the repository root; input paths are resolved from the source tree, not from the shell's current directory.
 
 Your solution must:
 
@@ -31,11 +31,19 @@ Your solution must:
 - Generate one prediction row for every request in `dataset/deletion_requests.csv`
 - Write the final predictions to `output.csv` in the repository root
 
-Run the starter Python entry point with:
+Run the full-dataset preflight with:
 
 ```bash
-python3 code/main.py
+python3 -m code.main run
 ```
+
+Inspect a single request's non-sensitive metadata with:
+
+```bash
+python3 -m code.main case case_000
+```
+
+At this foundation stage, `run` validates the request CSV and deliberately exits without writing predictions. The audit pipeline will be added in subsequent tasks; the CLI will fail clearly rather than create placeholder answers. No model API key is needed for these preflight commands. When model integration is added, configure `AUDIT_MODEL_PROVIDER`, `AUDIT_MODEL_NAME`, and `AUDIT_API_KEY` through the environment; token pricing can be supplied using `AUDIT_INPUT_USD_PER_MILLION` and `AUDIT_OUTPUT_USD_PER_MILLION`.
 
 The blank template at `dataset/output.csv` is provided as a reference. Your final generated file for submission must be the root-level `output.csv`.
 
