@@ -110,3 +110,86 @@ branch=feat/terminal-agent-foundation
 repo_root=/Users/vidura/Code/hackerrank-orchestrate-october26
 worktree=/Users/vidura/Code/hackerrank-orchestrate-october26
 parent_agent=none
+
+## [2026-10-24T16:22:49.929460+00:00] Implement single-agent guardrails and inspection record
+
+User Prompt (verbatim, secrets redacted):
+Do the same with [03-agent-guardrails.md](todo/03-agent-guardrails.md)
+
+Agent Response Summary:
+Implemented a transport-injected single agent with exactly one read-only case tool, middleware gating, closed structured responses, exact citation binding, uncertainty escalation, privacy-minimal review records, and bounded retries. Added a guard CLI for offline saved-response validation and a complete file/function inspection record. All 26 tests passed, including 17 new guardrail tests; a real participant case escalated before any model call when attribution was incomplete. Live provider integration and task 04 policy/output work remain separate.
+
+Actions:
+* Added code/guardrails.py, code/agent.py, tests/test_guardrails.py, and code/AGENT_GUARDRAILS_RECORD.md.
+* Updated code/main.py, README.md, and todo/03-agent-guardrails.md.
+* Ran unittest discovery, guard CLI smoke, review-record assertions, and git diff --check.
+
+Context:
+tool=Codex
+model=gpt-6.1-sol
+branch=feat/terminal-agent-foundation
+repo_root=/Users/vidura/Code/hackerrank-orchestrate-october26
+worktree=/Users/vidura/Code/hackerrank-orchestrate-october26
+parent_agent=none
+## [2026-10-24T16:29:10Z] Put implementation steps on separate branches
+
+User Prompt (verbatim, secrets redacted):
+commit the 2 steps sepratly on seerate branchces
+
+Agent Response Summary:
+Interpreted the two steps as the already completed foundation and evidence-pipeline commits after checking the current history. Created `feat/step-01-foundation` at `e1dcc63` and `feat/step-02-evidence-pipeline` at `81dc0e4`; both commits remain unchanged, and the second step is based on the first. Kept the current branch and its uncommitted guardrail work untouched.
+
+Actions:
+* Inspected `git log`, branch refs, and working-tree status.
+* Created branch refs `feat/step-01-foundation` and `feat/step-02-evidence-pipeline` at the existing commits.
+* Rechecked branch pointers and working-tree status.
+
+Context:
+tool=Codex
+model=gpt-6-luna
+branch=feat/terminal-agent-foundation
+repo_root=/Users/vidura/Code/hackerrank-orchestrate-october26
+worktree=main
+parent_agent=none
+## [2026-10-24T16:33:06Z] Open evidence and guardrails pull requests
+
+User Prompt (verbatim, secrets redacted):
+create a PR for the seconds and commit the 3rd step also on a new branch and make a pr
+
+Agent Response Summary:
+The existing evidence-pipeline PR #2 was closed unmerged, so created a clean evidence-pipeline branch from the merged foundation and opened PR #3 against `main`. Committed the guardrails implementation as `e359230` on `feat/agent-guardrails` and opened PR #4 stacked on PR #3. Linked both PRs to this T3 thread; the current working-tree change is only the required conversation log update.
+
+Actions:
+* Checked GitHub PR state and found PR #2 closed unmerged.
+* Stashed and restored in-progress guardrail changes while preparing a clean evidence-pipeline branch; cherry-picked the evidence commit onto current `origin/main`.
+* Pushed `feat/evidence-pipeline-pr`; opened and linked https://github.com/TonyRoyze/hackerrank-orchestrate-october26/pull/3.
+* Committed guardrails as `e359230` on `feat/agent-guardrails`; pushed it; opened and linked https://github.com/TonyRoyze/hackerrank-orchestrate-october26/pull/4 with PR #3 as its base.
+* Confirmed PR #3 and PR #4 are open and linked; `git diff --check` passed. Tests were not run.
+
+Context:
+tool=Codex
+model=gpt-6-luna
+branch=feat/agent-guardrails
+repo_root=/Users/vidura/Code/hackerrank-orchestrate-october26
+worktree=main
+parent_agent=none
+## [2026-10-24T16:36:38Z] Commit remaining session transcript and open PR
+
+User Prompt (verbatim, secrets redacted):
+commit any uncommited changes in a suitable branch adn open a pr
+
+Agent Response Summary:
+The only uncommitted changes were session transcript entries in `log.txt`. Isolated the transcript update on `docs/agent-chat-transcript-2026-10-24` so it does not alter the guardrails implementation, then committed and prepared a transcript-only pull request.
+
+Actions:
+* Inspected the working tree and confirmed only `log.txt` was modified.
+* Created branch `docs/agent-chat-transcript-2026-10-24` from `feat/agent-guardrails`.
+* Appended this per-turn record, committed the transcript update, pushed the branch, opened a pull request, and linked it to this T3 thread.
+
+Context:
+tool=Codex
+model=gpt-6-luna
+branch=docs/agent-chat-transcript-2026-10-24
+repo_root=/Users/vidura/Code/hackerrank-orchestrate-october26
+worktree=main
+parent_agent=none
