@@ -163,3 +163,20 @@ Before submitting, confirm that:
 - `code.zip` includes your runnable code, `README.md`, `code/evaluation/evaluation_report.md`, and `code/evaluation/usage_report.md`;
 - `log.txt` follows the `AGENTS.md` turn format and is uploaded to the `chat_transcript` slot; and
 - no API keys, credentials, real personal data, or sensitive configuration values are included.
+
+## Evidence packets
+
+Build a case packet before the reasoning/guardrail stages:
+
+```bash
+python3 -m code.main packet case_33 --output /tmp/case_33.packet.json
+python3 -m unittest discover -s tests -v
+```
+
+Python 3.10+ is required. Text, JSON, logs, and SQLite-compatible SQL dumps use the standard library; supplied SQL is parsed without execution. For PDFs install Poppler (`pdftotext`); for screenshots install Tesseract (`tesseract`) and put both on `PATH`. On macOS: `brew install poppler tesseract`; on Debian/Ubuntu: `apt-get install poppler-utils tesseract-ocr`. Missing tools and extraction failures are reported as uncertainties.
+
+Packets include identity-link provenance, source locations, manifest capture times, explicit event times, policy rules, observations, claims, and uncertainties. Default evidence limits are 150 facts and 60,000 serialized fact characters; truncation is explicit and must be resolved before a final deletion judgment. Identity links, rules, and envelope fields are additional to this fact budget. Output includes fictional identifiers, so packets are written only to an explicit destination. No model credentials or calls are needed.
+
+`NOT_APPLICABLE` requests return `steps_json: []` before artifact retrieval. Ambiguous intent or identity stops retrieval for review. Authorized packets do not assign a deletion status: policy reasoning, remediation planning, final output generation, and model integration remain subsequent tasks. `run` remains the foundation preflight command.
+
+Read [the implementation record](code/EVIDENCE_PIPELINE_RECORD.md) for every file and function added or changed, review guidance, and known limits.

@@ -40,6 +40,10 @@ def build_parser() -> argparse.ArgumentParser:
         default=Settings().dataset_dir / "deletion_requests.csv",
         help="participant-facing request CSV (defaults to dataset/deletion_requests.csv)",
     )
+    packet_parser = subparsers.add_parser("packet", help="build a bounded evidence packet (no model calls)")
+    packet_parser.add_argument("case_id")
+    packet_parser.add_argument("--input", type=Path, default=Settings().dataset_dir / "deletion_requests.csv")
+    packet_parser.add_argument("--output", type=Path, required=True, help="explicit destination; contains fictional subject identifiers")
     return parser
 
 
@@ -51,6 +55,20 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Input error: {exc}", file=sys.stderr)
         return 2
 
+    if args.command == "packet":
+        from .pipeline import EvidencePipeline
+        request = next((item for item in requests if item.case_id == args.case_id), None)
+        if request is None:
+            print(f"Case not found: {args.case_id}", file=sys.stderr)
+            return 2
+        try:
+            packet = EvidencePipeline(args.input.resolve().parent).packet(request)
+            args.output.write_text(packet.to_json() + "\n", encoding="utf-8")
+        except (InputError, ValueError, OSError) as exc:
+            print(f"Packet error: {exc}", file=sys.stderr)
+            return 2
+        print(f"Packet written: {len(packet.facts)} facts; {len(packet.uncertainty)} uncertainties.")
+        return 0
     if args.command == "case":
         return _show_case(args.case_id, requests)
     return _preflight_run(requests, args.expected_rows)
